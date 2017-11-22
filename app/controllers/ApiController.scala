@@ -24,7 +24,7 @@ import play.api.mvc._
 import akka.actor._
 import javax.inject._
 
-import actors.{HelloActor, PubApiActor}
+import actors.{HelloActor, PubApiActor, RestDBConnector}
 import actors.HelloActor.SayHello
 import play.api.libs.concurrent.Akka
 import play.api.libs.concurrent.Execution.Implicits.defaultContext
@@ -32,6 +32,8 @@ import play.api.libs.concurrent.Execution.Implicits.defaultContext
 import scala.concurrent.duration._
 import akka.pattern.ask
 import akka.util.Timeout
+import play.api.routing.JavaScriptReverseRouter
+import processor.Processor
 
 import scala.collection.JavaConversions._
 /**
@@ -47,12 +49,22 @@ class ApiController @Inject() (system: ActorSystem) extends Controller {
 
 
   def hello = Action.async {
-    implicit val timeout: Timeout = 300.seconds
+    implicit val timeout: Timeout = 10.seconds
     (pubApiActor ? PubApiActor.ReviewApi).mapTo[String].map { message =>
       Ok(message)
     }
   }
 
+  def submit(text: String) = Action {
+      val res = Processor.transform(text)
+      RestDBConnector.write(text, res)
+      Ok("Submitted")
+  }
+
+  def history = Action {
+    RestDBConnector.read()
+    Ok(RestDBConnector.read())
+  }
 
   def secret = Action{
     Ok(new File(secretPath).exists().toString)
@@ -60,6 +72,15 @@ class ApiController @Inject() (system: ActorSystem) extends Controller {
 
   def reply = Action {
     Ok("Blabla")
+  }
+
+  def javascriptRoutes = Action { implicit request =>
+    Ok(
+      JavaScriptReverseRouter("jsRoutes")(
+        routes.javascript.ApiController.submit,
+        routes.javascript.ApiController.history
+      )
+    ).as("text/javascript")
   }
 
 }

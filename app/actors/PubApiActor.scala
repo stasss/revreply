@@ -13,35 +13,44 @@ import com.google.api.services.androidpublisher.model.ReviewsReplyRequest
 import com.google.api.services.androidpublisher.{AndroidPublisher, AndroidPublisherScopes}
 import java.io.BufferedInputStream
 import java.io.InputStream
+
 import scala.collection.JavaConversions._
 import java.io.OutputStreamWriter
 
+import play.api.libs.json.Json
+import java.io.OutputStreamWriter
+
+import play.api.libs.ws.{WS, WSRequest}
 
 object RestDBConnector {
 
 
-  def write(): Unit = {
+  def write(text: String, sentiment: String): Unit = {
     val url = new URL("https://geocheck-65fc.restdb.io/rest/reviews")
     val urlConnection: HttpURLConnection = url.openConnection.asInstanceOf[HttpURLConnection]
     urlConnection.setRequestMethod("POST")
     urlConnection.setRequestProperty("content-type", "application/json")
     urlConnection.setRequestProperty("x-apikey", "59ea1e0e16d89bb778329415")
     urlConnection.setRequestProperty("cache-control", "no-cache")
-
-    import java.io.OutputStreamWriter
+    urlConnection.setDoOutput(true)
     val wr = new OutputStreamWriter(urlConnection.getOutputStream)
-    wr.write("{\"rev_id\":\"xyz\",\"comment\":\"abc\",\"sentiment\":\"abc\",\"reply\":\"abc\",\"meta\":\"abc\"}")
+
+    val repstr = "{\"rev_id\":\"xyz\",\"comment\":\"" + text + "\",\"sentiment\":\"" + sentiment + "\",\"reply\":\"abc\",\"meta\":\"abc\"}"
+
+    wr.write(repstr)
+    wr.close()
 
     val in = new BufferedInputStream(urlConnection.getInputStream)
     val res = scala.io.Source.fromInputStream(in).getLines().mkString("\n")
+
     in.close()
     urlConnection.disconnect()
 
-    println(res)
+    //println(res)
 
   }
 
-  def read(): Unit ={
+  def read(): String ={
     val url = new URL("https://geocheck-65fc.restdb.io/rest/reviews")
     val urlConnection: HttpURLConnection = url.openConnection.asInstanceOf[HttpURLConnection]
     urlConnection.setRequestMethod("GET")
@@ -52,8 +61,8 @@ object RestDBConnector {
     in.close()
     urlConnection.disconnect()
 
-    println(res)
 
+    return res
   }
 
   import java.io.BufferedInputStream

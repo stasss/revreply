@@ -12,20 +12,31 @@
 
 <div id="content" class="wrapper doc">
 <article>
-
-  <h1>@message</h1>
-  <pre><code>@@(message: String)
-
-@@main("WELCOME") {
-
-    @@welcome(message)
-
-}</code></pre>
-
+  <h3>Enter comment</h3>
+  <form action="#">
+    <textarea id="user-comment"></textarea>
+    <input type="submit" onclick="$.ajax(jsRoutes.controllers.ApiController.submit($('#user-comment').val())); return false" value="async" />
+  </form>
 </article>
 
+  <script type="text/javascript">
+
+    function convert(j){
+      var e = JSON.parse(j);
+       var res = '';
+       for (var i = 0, len = e.length; i < len; ++i) {
+         res = res + 'text: ' + e[i].comment + '\n';
+         res = res + 'sentiment: ' + e[i].sentiment + '\n\n\n';
+       }
+      return res;
+    }
+
+  </script>
+
 <aside>
-  <h3>Prepared</h3>
+  <h3>History</h3>
+  <textarea id="hisotry"></textarea>
+  <input type="submit" onclick="$.ajax(jsRoutes.controllers.ApiController.history()).done(function(data) {$('#hisotry').text(convert(data))}); return false" value="Refresh" />
 </aside>
 
 </div>
