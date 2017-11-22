@@ -107,7 +107,7 @@ class SentimentAnalyzer(strategy: SentenceStrategy) {
     val ann = new Annotation(text)
     pipeline.annotate(ann)
     val sentences: List[CoreMap] = ann.get(classOf[CoreAnnotations.SentencesAnnotation]).asScala.toList
-    strategy(sentences, labelByDelta)
+    strategy(sentences, label)
   }
 
 }
