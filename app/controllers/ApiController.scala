@@ -32,8 +32,9 @@ import play.api.libs.concurrent.Execution.Implicits.defaultContext
 import scala.concurrent.duration._
 import akka.pattern.ask
 import akka.util.Timeout
+//import openie.OpenIE
 import play.api.routing.JavaScriptReverseRouter
-import processor.Processor
+//import processor.Processor
 
 import scala.collection.JavaConversions._
 /**
@@ -56,8 +57,12 @@ class ApiController @Inject() (system: ActorSystem) extends Controller {
   }
 
   def submit(text: String) = Action {
-      val res = Processor.transform(text)
-      RestDBConnector.write(text, res)
+      //val res = Processor.transform(text)
+      //OpenIE.propsSplitDocument(text)
+
+      println("blabla")
+
+      //RestDBConnector.write(text, res)
       Ok("Submitted")
   }
 
@@ -77,8 +82,8 @@ class ApiController @Inject() (system: ActorSystem) extends Controller {
   def javascriptRoutes = Action { implicit request =>
     Ok(
       JavaScriptReverseRouter("jsRoutes")(
-        routes.javascript.ApiController.submit,
-        routes.javascript.ApiController.history
+        //routes.javascript.ApiController.submit,
+       // routes.javascript.ApiController.history
       )
     ).as("text/javascript")
   }

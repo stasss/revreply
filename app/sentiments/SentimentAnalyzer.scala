@@ -1,7 +1,7 @@
 package sentiments
 
 import java.util.Properties
-
+/*
 import edu.stanford.nlp.ling.CoreAnnotations
 import edu.stanford.nlp.neural.rnn.RNNCoreAnnotations
 import edu.stanford.nlp.pipeline.{Annotation, StanfordCoreNLP}
@@ -111,3 +111,4 @@ class SentimentAnalyzer(strategy: SentenceStrategy) {
   }
 
 }
+*/

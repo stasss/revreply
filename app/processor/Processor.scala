@@ -1,5 +1,6 @@
 package processor
 
+/*
 import sentiments.{SentimentAnalyzer, SimpleStrategy}
 
 object Processor {
@@ -27,3 +28,4 @@ class Processor {
   import Processor._
 
 }
+*/

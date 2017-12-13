@@ -1,27 +1,70 @@
-@*
- * This template is called from the `index` template. This template
- * handles the rendering of the page header and body tags. It takes
- * two arguments, a `String` for the title of the page and an `Html`
- * object to insert into the body of the page.
- *@
-@(title: String)(content: Html)
+@import dbconn._
+@import helper._
+@import play.api.Play.current
+@import play.api.i18n.Messages.Implicits._
+@(games: Seq[Game], game: Game, rules: Seq[Rule], gameForm: Form[GameForm], ruleForm: Form[RuleForm])(content: Html)
 
 <!DOCTYPE html>
 <html lang="en">
     <head>
         @* Here's where we render the page title `String`. *@
-        <title>@title</title>
+        <title>Any</title>
         <link rel="stylesheet" media="screen" href="@routes.Assets.versioned("stylesheets/main.css")">
         <link rel="shortcut icon" type="image/png" href="@routes.Assets.versioned("images/favicon.png")">
-
 
         <script src="@routes.Assets.versioned("javascripts/hello.js")" type="text/javascript"></script>
         <script src="@routes.Assets.versioned("javascripts/jquery-3.2.1.min.js")" type="text/javascript"></script>
         <script type="text/javascript" src="@routes.ApiController.javascriptRoutes"></script>
     </head>
-    <body>
-        @* And here's where we render the `Html` object containing
-         * the page content. *@
-        @content
+    <h1 style="text-align: center;"><strong><i><u>Replay</u></i><br /><br /></strong></h1>
+    @helper.form(action = routes.GameController.select()) {
+      @select(
+      field = gameForm("gameId"),
+      options = games.map(game => (game.gameId -> game.name)),
+      '_label -> "Select game : "
+      )
+    <button type="submit" name="action" value="submit">Select</button>
+    }
+    <hr />
+    <table style="width: 889px;">
+        <tbody>
+        <tr style="height: 41px;">
+            <td style="width: 310px; height: 41px;">Rules</td>
+            <td style="width: 287px; height: 41px;">Test</td>
+            <td style="width: 291px; height: 41px;">QA</td>
+        </tr>
+        <tr style="height: 108px;">
+            <td style="width: 310px; height: 108px;">
+                @if(game != null){
+                @helper.form(action = routes.GameController.createRule()) {
+                  @helper.inputText(ruleForm("keywords"))
+                  @helper.inputText(ruleForm("starRating"))
+                  @helper.inputText(ruleForm("response"))
+                <button type="submit" name="action" value="submit">Create rule</button>
+                }
+                <ul>
+                @for(rule <- rules) {
+                <li>
+                <= @rule.ruleId =>
+                    <br>
+                @rule.keywords
+                    <br>
+                @rule.starRating
+                    <br>
+                @rule.response
+                    <br>
+                <=====================>
+                </li>
+                }
+                </ul>
+                }
+            </td>
+            <td style="width: 287px; height: 108px;"></td>
+            <td style="width: 291px; height: 108px;"></td>
+        </tr>
+        </tbody>
+    </table>
+    <br />
+    <p></p>
     </body>
 </html>
