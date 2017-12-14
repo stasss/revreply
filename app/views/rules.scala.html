@@ -1,0 +1,41 @@
+@import dbconn._
+@import play.api.Play.current
+@import play.api.i18n.Messages.Implicits._
+@import helper._
+
+@(game: Game, rules: Seq[Rule], ruleForm: Form[RuleForm])
+@if(game != null){
+<div class="col-sm-4">
+    <h2>Create new</h2>
+    <div class="well">
+        <div class="form-group">
+            @helper.form(action = routes.GameController.createRule()){
+            <label for="keywords">Keywords:</label>
+            <input type="text" name="keywords" class="form-control" id="keywords">
+            <label for="starRate">Star rating:</label>
+            <input type="text" name="starRating" class="form-control" id="starRate">
+            <label for="response">Response:</label>
+            <input type="text" name="response" class="form-control" id="response">
+            <input type="submit" value="Create" class="btn btn-default">
+            }
+        </div>
+    </div>
+</div>
+<div class="col-sm-4">
+    <h2>Rules</h2>
+        @for(rule <- rules) {
+        <div class="panel panel-default">
+            <div class="panel-heading"><p>@rule.ruleId  <span class="badge">@rule.starRating</span></p>
+            </div>
+            <div class="panel-body">
+                <label>Keywords</label>
+                <input type="text" value="@rule.keywords" id="kwds@rule.ruleId" class="form-control">
+                <label>Response</label>
+                <textarea class="form-control" rows="5">@rule.response</textarea>
+            </div>
+        </div>
+        }
+</div>
+}else{
+
+}

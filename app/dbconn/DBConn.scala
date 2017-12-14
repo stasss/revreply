@@ -20,13 +20,13 @@ trait DBConn {
   def getGame(gameId: String): Game
   def getRules(game: Game): Seq[Rule]
   def getRule(ruleId: String): Rule
-  def getReplies(ruleId: String): Rule
   def createRule(rule: Rule): Unit
   def createReply(reply: Reply): Unit
+  def getReplies(game: Game): Seq[Reply]
 }
 
 
-object RestDBConn{
+object RestDBConn {
 
   val endpoint = "https://geocheck-65fc.restdb.io/rest/"
   val xApiKey = "59ea1e0e16d89bb778329415"
@@ -34,12 +34,13 @@ object RestDBConn{
   val accountsCollection = "accounts"
   val gamesCollection =    "games"
   val ruleCollections =    "rules"
+  val replyCollection =    "replies"
 
   import play.api.libs.functional.syntax._
 
   implicit val gameReads = Json.reads[Game]
   implicit val ruleReads = Json.reads[Rule]
-  //implicit val accountReads = Json.reads[Account]
+  implicit val replyReads = Json.reads[Reply]
 
   implicit val accountWrites = new Writes[Account] {
     def writes(account: Account) = Json.obj(
@@ -79,6 +80,7 @@ object RestDBConn{
       case acc : Account =>    accountWrites.writes(acc.asInstanceOf[Account]).toString()
       case game : Game    =>   gameWrites.writes(game.asInstanceOf[Game]).toString()
       case rule : Rule    =>   ruleWrites.writes(rule.asInstanceOf[Rule]).toString()
+      case reply : Reply    => replyWrites.writes(reply.asInstanceOf[Reply]).toString()
       case _ => throw new RuntimeException("Not writable entity")
     }
   }
@@ -88,6 +90,7 @@ object RestDBConn{
       case _ : Account => "accounts"
       case _ : Game    => "games"
       case _ : Rule    => "rules"
+      case _ : Reply    => replyCollection
       case _ => throw new RuntimeException("Not writable entity")
     }
   }
@@ -155,14 +158,21 @@ class RestDBConn extends DBConn{
   }
 
   override def getRule(ruleId: String): Rule = {
-    Json.fromJson[Seq[Rule]](Json.parse(buildQuery(ruleCollections, Some(s"{${esc}ruleId${esc}:${esc}${ruleId}${esc}")))).get.head
+    Json.fromJson[Seq[Rule]](Json.parse(buildQuery(ruleCollections, Some(s"{${esc}ruleId${esc}:${esc}${ruleId}${esc}}")))).get.head
   }
 
   override def createRule(rule: Rule): Unit = {
     buildPost(rule)
   }
 
-  override def getReplies(ruleId: String): Rule = ???
+  override def createReply(reply: Reply): Unit = {
+    buildPost(reply)
+  }
 
-  override def createReply(reply: Reply): Unit = ???
+  override def getReplies(game: Game): Seq[Reply] = {
+
+    println("WTF" + buildQuery(replyCollection, Some(s"{${esc}gameId${esc}:${esc}${game.gameId}${esc}}")))
+
+    Json.fromJson[Seq[Reply]](Json.parse(buildQuery(replyCollection, Some(s"{${esc}gameId${esc}:${esc}${game.gameId}${esc}}")))).get
+  }
 }
