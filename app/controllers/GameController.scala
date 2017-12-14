@@ -73,8 +73,8 @@ class GameController @Inject() extends Controller {
       val rules = dbconn.getRules(currentGame)
 
       val fired = rules.filter( rule => {
-        val kwds = rule.keywords.split(",")
-        starRating == rule.starRating && kwds.forall( wrd => message.contains(wrd))
+        val kwds = rule.keywords.split(",").map(_.trim.toLowerCase())
+        starRating == rule.starRating && kwds.forall( wrd => message.toLowerCase.contains(wrd))
       }).headOption
      dbconn.createReply(Reply(UUID.randomUUID().toString, message, starRating, fired.map(_.ruleId).getOrElse("EMPTY"), currentGame.gameId))
      Redirect(routes.GameController.index)
