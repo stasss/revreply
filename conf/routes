@@ -7,6 +7,7 @@ GET     /                           controllers.GameController.index
 GET     /select                     controllers.GameController.select
 GET     /createRule                 controllers.GameController.createRule
 GET     /createMessage              controllers.GameController.createMessage
+GET     /playGame/:game             controllers.GameController.playGame(game: String, from: Int, to: Int)
 # Map static resources from the /public folder to the /assets URL path
 GET     /assets/*file               controllers.Assets.versioned(path="/public", file: Asset)
 # to work on heroku
