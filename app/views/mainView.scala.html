@@ -1,0 +1,106 @@
+@import dbconn._
+@import helper._
+@import play.api.Play.current
+@import play.api.i18n.Messages.Implicits._
+@import model._
+@(user: User, serviceAccounts: Seq[ServiceAccount], serviceForm: Form[ServiceAccountForm])
+<html lang="en">
+<head>
+    <title>Reply bot</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.0/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <link rel="stylesheet" media="screen" href="@routes.Assets.versioned("stylesheets/main.css")">
+    <link rel="shortcut icon" type="image/png" href="@routes.Assets.versioned("images/favicon.png")">
+
+    <script src="@routes.Assets.versioned("javascripts/hello.js")" type="text/javascript"></script>
+        <script src="@routes.Assets.versioned("javascripts/jquery-3.2.1.min.js")" type="text/javascript"></script>
+    <script type="text/javascript" src="@routes.ApiController.javascriptRoutes"></script>
+</head>
+<body>
+
+<div class="bs-docs-section">
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="bs-component">
+                <div class="jumbotron">
+                    <h1 class="display-3">Google play reply bot!</h1>
+                    <p class="lead">Welcome, @user.token</p>
+                    <p><a href="/logoff">Log off</a></p>
+                    <hr class="my-4">
+                </div>
+            </div>
+        </div>
+    </div>
+    <ul class="nav nav-tabs">
+        <li class="nav-item">
+            <a class="nav-link" data-toggle="tab" href="#home">Home</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link active show" data-toggle="tab" href="#profile">Profile</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link disabled" href="#">Disabled</a>
+        </li>
+        <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">Dropdown</a>
+            <div class="dropdown-menu" x-placement="bottom-start" style="position: absolute; will-change: transform; top: 0px; left: 0px; transform: translate3d(0px, 44px, 0px);">
+                <a class="dropdown-item" href="#">Action</a>
+                <a class="dropdown-item" href="#">Another action</a>
+                <a class="dropdown-item" href="#">Something else here</a>
+                <div class="dropdown-divider"></div>
+                <a class="dropdown-item" href="#">Separated link</a>
+            </div>
+        </li>
+    </ul>
+    <div id="myTabContent" class="tab-content">
+        <div class="tab-pane fade active show" id="home">
+            @if(serviceAccounts.isEmpty){
+             <p>You have no service account provided for the game, would you like to add?</p>
+             @helper.form(action = routes.MenuController.addService()){
+             <div class="form-group">
+                <label for="email">email</label>
+                <input type="text" name="email" id="email" tabindex="1" class="form-control" placeholder="examle@@example.com" value="">
+             </div>
+             <div class="form-group">
+                <label for="appName">Password</label>
+                <input type="text" name="appName" id="appName" tabindex="2" class="form-control" placeholder="domen.package.name">
+             </div>
+            <input type="submit" name="login-submit" id="login-submit" tabindex="4" class="btn btn-primary btn-lg" value="Add">
+
+            }
+            }else{
+            @for(value <- serviceAccounts){
+            <div class="card text-white bg-primary mb-3" style="max-width: 20rem;">
+                <div class="card-header">@value.appName</div>
+                <div class="card-body">
+                    <h4 class="card-title">@value.serviceEmail</h4>
+                </div>
+            </div>
+            }
+            }
+        </div>
+        <div class="tab-pane fade active show" id="profile">
+            <p>Food truck fixie locavore, accusamus mcsweeney's marfa nulla single-origin coffee squid. Exercitation +1 labore velit, blog sartorial PBR leggings next level wes anderson artisan four loko farm-to-table craft beer twee. Qui photo booth letterpress, commodo enim craft beer mlkshk aliquip jean shorts ullamco ad vinyl cillum PBR. Homo nostrud organic, assumenda labore aesthetic magna delectus mollit.</p>
+        </div>
+        <div class="tab-pane fade" id="dropdown1">
+            <p>Etsy mixtape wayfarers, ethical wes anderson tofu before they sold out mcsweeney's organic lomo retro fanny pack lo-fi farm-to-table readymade. Messenger bag gentrify pitchfork tattooed craft beer, iphone skateboard locavore carles etsy salvia banksy hoodie helvetica. DIY synth PBR banksy irony. Leggings gentrify squid 8-bit cred pitchfork.</p>
+        </div>
+        <div class="tab-pane fade" id="dropdown2">
+            <p>Trust fund seitan letterpress, keytar raw denim keffiyeh etsy art party before they sold out master cleanse gluten-free squid scenester freegan cosby sweater. Fanny pack portland seitan DIY, art party locavore wolf cliche high life echo park Austin. Cred vinyl keffiyeh DIY salvia PBR, banh mi before they sold out farm-to-table VHS viral locavore cosby sweater.</p>
+        </div>
+    </div>
+
+
+        <footer id="footer">
+            <div class="row">
+            </div>
+        </footer>
+    </div>
+
+    <script src="../_vendor/jquery/dist/jquery.min.js"></script>
+    <script src="../_vendor/popper.js/dist/umd/popper.min.js"></script>
+    <script src="../_vendor/bootstrap/dist/js/bootstrap.min.js"></script>
+    <script src="../_assets/js/custom.js"></script>
+</body>
+</html>

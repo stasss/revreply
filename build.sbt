@@ -15,4 +15,9 @@ libraryDependencies += "edu.stanford.nlp" % "stanford-corenlp" % "3.8.0"
 libraryDependencies += "edu.stanford.nlp" % "stanford-corenlp" % "3.8.0" classifier "models"
 
 
+libraryDependencies += "com.amazonaws" % "aws-java-sdk-s3" % "1.11.264"
+libraryDependencies += "org.postgresql" % "postgresql" % "9.4.1212"
+
+
+
 

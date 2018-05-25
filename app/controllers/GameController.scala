@@ -3,7 +3,8 @@ package controllers
 import java.util.UUID
 import javax.inject._
 
-import dbconn.{Game, Reply, RestDBConn, Rule}
+import dbconn._
+import model.UserRepository
 import play.api.data.Form
 import play.api.mvc._
 import services.Counter
@@ -45,6 +46,7 @@ class GameController @Inject() extends Controller {
   var currentGame: Game = null
 
   def index = Action {
+    //println(UserRepository.login("admin", "admin"))
     dbconn.getGames()
     val rules = if(currentGame == null) null else dbconn.getRules(currentGame)
     val history = if(currentGame == null) null else dbconn.getReplies(currentGame)
