@@ -5,11 +5,12 @@
 # An example controller showing a sample home page
 GET     /                           controllers.LoginController.index
 GET     /login                      controllers.LoginController.login
-GET     /logoff                      controllers.LoginController.logoff
+GET     /logoff                     controllers.LoginController.logoff
 GET     /menu                       controllers.MenuController.index
 GET     /oldix                      controllers.GameController.index
 GET     /select                     controllers.GameController.select
 GET     /createRule                 controllers.GameController.createRule
+GET     /old                        controllers.GameController.index
 GET     /addService                 controllers.MenuController.addService
 GET     /createMessage              controllers.GameController.createMessage
 GET     /playGame/:game             controllers.GameController.playGame(game: String, from: Int, to: Int)
