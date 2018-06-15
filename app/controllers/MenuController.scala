@@ -24,8 +24,8 @@ class MenuController @Inject() extends Controller {
 
   val serviceForm = Form(
     mapping(
-      "email" ->   text,
-      "appName" -> text
+      "appName" ->   text,
+      "jsonKey" -> text
     )(ServiceAccountForm.apply)(ServiceAccountForm.unapply)
   )
 
@@ -34,12 +34,12 @@ class MenuController @Inject() extends Controller {
     implicit request =>
        BasicAuth.logged(request) match {
          case Some(u) => {
-
-           println("SASA" + ServiceRepository.accountsByUser(u))
-
+           println(ServiceRepository.accountsByUser(u));
            Ok(views.html.mainView(u, ServiceRepository.accountsByUser(u), serviceForm))
          }
-         case None    =>   Unauthorized("Authentication Failed")
+         case None    =>  {
+           println("LALALALALAL")
+           Unauthorized("Authentication Failed")}
        }
   }
 
@@ -48,9 +48,9 @@ class MenuController @Inject() extends Controller {
       BasicAuth.logged(request) match {
         case Some(u) => {
           val appName = request.body.appName
-          val email   = request.body.email
-          ServiceRepository.addAccount(u, email, appName)
-          Ok(views.html.mainView(u, ServiceRepository.accountsByUser(u), serviceForm))
+          val jsonKey   = request.body.jsonKey
+          ServiceRepository.addAccount(u, appName, jsonKey)
+          Redirect("/")
         }
         case None    =>   Unauthorized("Authentication Failed")
       }
@@ -58,4 +58,4 @@ class MenuController @Inject() extends Controller {
 
 }
 
-case class ServiceAccountForm(email: String, appName: String)
+case class ServiceAccountForm(appName: String, jsonKey: String)

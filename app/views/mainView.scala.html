@@ -34,10 +34,10 @@
     </div>
     <ul class="nav nav-tabs">
         <li class="nav-item">
-            <a class="nav-link" data-toggle="tab" href="#home">Home</a>
+            <a class="nav-link" data-toggle="tab" href="#sa">Service Account</a>
         </li>
         <li class="nav-item">
-            <a class="nav-link active show" data-toggle="tab" href="#profile">Profile</a>
+            <a class="nav-link active show" data-toggle="tab" href="#profile">Rules</a>
         </li>
         <li class="nav-item">
             <a class="nav-link disabled" href="#">Disabled</a>
@@ -54,34 +54,30 @@
         </li>
     </ul>
     <div id="myTabContent" class="tab-content">
-        <div class="tab-pane fade active show" id="home">
+        <div class="tab-pane fade active show" id="sa">
             @if(serviceAccounts.isEmpty){
              <p>You have no service account provided for the game, would you like to add?</p>
              @helper.form(action = routes.MenuController.addService()){
              <div class="form-group">
-                <label for="email">email</label>
-                <input type="text" name="email" id="email" tabindex="1" class="form-control" placeholder="examle@@example.com" value="">
-             </div>
-             <div class="form-group">
                 <label for="appName">Password</label>
                 <input type="text" name="appName" id="appName" tabindex="2" class="form-control" placeholder="domen.package.name">
              </div>
+            <div class="form-group">
+                <label for="appName">Service account key</label>
+                <textarea name="jsonKey" id="jsonKey" class="form-control"></textarea>
+            </div>
             <input type="submit" name="login-submit" id="login-submit" tabindex="4" class="btn btn-primary btn-lg" value="Add">
 
             }
             }else{
             @for(value <- serviceAccounts){
             <div class="card text-white bg-primary mb-3" style="max-width: 20rem;">
-                <div class="card-header">@value.appName</div>
-                <div class="card-body">
-                    <h4 class="card-title">@value.serviceEmail</h4>
-                </div>
+                <div class="card-header">You got service account for the game - @value.appName</div>
             </div>
             }
             }
         </div>
         <div class="tab-pane fade active show" id="profile">
-            <p>Food truck fixie locavore, accusamus mcsweeney's marfa nulla single-origin coffee squid. Exercitation +1 labore velit, blog sartorial PBR leggings next level wes anderson artisan four loko farm-to-table craft beer twee. Qui photo booth letterpress, commodo enim craft beer mlkshk aliquip jean shorts ullamco ad vinyl cillum PBR. Homo nostrud organic, assumenda labore aesthetic magna delectus mollit.</p>
         </div>
         <div class="tab-pane fade" id="dropdown1">
             <p>Etsy mixtape wayfarers, ethical wes anderson tofu before they sold out mcsweeney's organic lomo retro fanny pack lo-fi farm-to-table readymade. Messenger bag gentrify pitchfork tattooed craft beer, iphone skateboard locavore carles etsy salvia banksy hoodie helvetica. DIY synth PBR banksy irony. Leggings gentrify squid 8-bit cred pitchfork.</p>
